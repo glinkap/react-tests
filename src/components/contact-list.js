@@ -6,12 +6,15 @@ class ContactList extends Component {
 	constructor() {
 		super();
 		this.state = {
-			filtered: Contacts
+			filtered: Contacts,
+			inputedItems:[]
 		}
 	}
 	handleChange(e) {
 		const searchQuery = e.target.value.toLowerCase();
-		const filtered = Contacts.filter((el) => {
+
+console.log("Contacts.concat(this.state.inputedItems)", Contacts.concat(this.state.inputedItems));
+		const filtered = Contacts.concat(this.state.inputedItems).filter((el) => {
 			return el.name.indexOf(searchQuery) !== -1
 		});
 			console.log("this", this);
@@ -20,10 +23,19 @@ class ContactList extends Component {
 		});
 
 	};
+	newItem(item){
+		// item.id = this.state.filtered.length + 1;
+		console.log(this.state);
+		this.setState({
+			inputedItems: this.state.inputedItems.concat(item)				
+		});
+		console.log(this.state.inputedItems);
+		console.log("состояние изменилось");
+	}
 	render() {
 		return (
 			<div>
-				<AddContact />
+				<AddContact onSubmit={this.newItem.bind(this)} />
 				<input type="text" onChange={this.handleChange.bind(this)} />
 				<ul>
 					{
