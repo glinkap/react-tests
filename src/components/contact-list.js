@@ -1,36 +1,33 @@
 import Contacts from './contacts';
 import React, {Component}  from 'react';
 import AddContact from './addcontact';
-
 class ContactList extends Component {
 	constructor() {
 		super();
 		this.state = {
 			filtered: Contacts,
-			inputedItems:[]
-		}
+			inputedItems:[],
+			fullList:[]
+		};
+		this.props = {idGen:0};
 	}
 	handleChange(e) {
 		const searchQuery = e.target.value.toLowerCase();
-
-console.log("Contacts.concat(this.state.inputedItems)", Contacts.concat(this.state.inputedItems));
 		const filtered = Contacts.concat(this.state.inputedItems).filter((el) => {
 			return el.name.indexOf(searchQuery) !== -1
 		});
-			console.log("this", this);
 		this.setState({
 			filtered: filtered				
 		});
 
 	};
 	newItem(item){
-		// item.id = this.state.filtered.length + 1;
-		console.log(this.state);
+		console.log("this", this);
+		item.id = this.state.inputedItems.concat(this.state.filtered).length + 1;
 		this.setState({
 			inputedItems: this.state.inputedItems.concat(item)				
 		});
-		console.log(this.state.inputedItems);
-		console.log("состояние изменилось");
+		// this.forceUpdate();
 	}
 	render() {
 		return (
@@ -39,10 +36,11 @@ console.log("Contacts.concat(this.state.inputedItems)", Contacts.concat(this.sta
 				<input type="text" onChange={this.handleChange.bind(this)} />
 				<ul>
 					{
-						this.state.filtered.map((el) => {
+						this.state.filtered.concat(this.state.inputedItems).map((el) => {
 							return (
-								<li key={el.id}>
+								<li key ={el.id.toString()}>
 									<img src={el.avatar} width='100px' alt=""/>
+									<p>{el.id}</p>
 									<p className="name">{el.name}</p>
 									<p className="phone">{el.phone}</p>	
 								</li>
